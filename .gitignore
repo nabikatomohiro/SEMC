@@ -33,6 +33,7 @@
 
 # Data
 *.txt
+!*/input
 
 # Vscode
 .vscode
