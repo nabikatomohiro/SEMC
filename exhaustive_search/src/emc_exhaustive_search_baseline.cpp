@@ -174,8 +174,8 @@ int main(){
     op.robbins_parameter.p_goal = 0.5;
     op.robbins_parameter.N_0 = 15;
     op.robbins_parameter.c = 4.0;
-    op.sample_num = 200000;
-    op.burn_in = 100000;
+    op.sample_num = 2000000;
+    op.burn_in = 1000000;
     op.data_num = data_num;
     // vector<double> d_w{1.0,1.0,0.6,1.0,1.0,1.0,1.0,1.0,0.8};
     // vector<double> d_b{0.8,0.8,0.6,0.4};
