@@ -5,7 +5,7 @@ This repository contains the C++ code to reproduce the result of our paper: Tomo
 ## Compiling and Running
 We did numerical experiments in four problem settings: Sampling from artificial multimodal distribution, Spectral deconvolution(K=3), Spectral deconvolution(K=4) and Exhaustive search. Each source code is in the multimodal_samling/src, spectral_deconvolution/src, spectral_deconvolution_K_4/src and exhaustive_seach/src directory, respectively. 
 
-To complie and run, go to the */src　directory, compile with "g++ "file_name.cpp" -O3 -fopenmp", and run ./a.out. Each .cpp file in */src folders are as follows:
+To complie and run, go to the */src　directory, compile with "g++ file_name.cpp -O3 -fopenmp", and run ./a.out. Each .cpp file in */src folders are as follows:
 
 - emc_*_base.cpp
   - For calculating baseline by REMC.
