@@ -25,7 +25,19 @@ In the show directory, there are three .ipynb file Distribution_compare.ipynb, F
 Each file is for showing the result of distirubions distance, Free energy error, and Monte Calro parameter, respectively.
 To show the result, execute in order from the top.
 
-## Description for Each Files
+## Description for Other Files
 
-1. core/base_sampling
+- Eigen
+  - C++ template library for linear algebra
+- core/base_sampling.hpp
+  - The base class for semc, remc and tmcmc
+- core/base_emc.hpp
+  - The class for remc
+- core/base_semc.hpp
+  - The class for semc
+- core/base_tmcmc.hpp
+  - The class for tmcmc
+- x/src/x.hpp  (x = multimodal_samling, spectral_deconvolution spectral_deconvolution_K_4 and exhaustive_seach
+  - The header file for each .cpp file
+
 
