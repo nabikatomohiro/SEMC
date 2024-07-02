@@ -37,7 +37,7 @@ To show the result, execute in order from the top.
   - The class for semc
 - core/base_tmcmc.hpp
   - The class for tmcmc
-- x/src/x.hpp  (x = multimodal_samling, spectral_deconvolution spectral_deconvolution_K_4 and exhaustive_seach
+- x/src/y.hpp  ((x,y) = (multimodal_samling, multimodal_samling), (spectral_deconvolution, spectral_deconvolution), (spectral_deconvolution_K_4, spectral_deconvolution), (exhaustive_search, exhaustive_search))
   - The header file for each .cpp file
 
 
