@@ -63,6 +63,7 @@ struct ModelOptions {
      * @param data_num              : データ数
      * @param parallel_num          : 並列数
      * @param n_steps               : ステップ数
+     * @param M_pop               : Waste freeのぽピュレーション数
      */
 
     int replica_num;
@@ -77,6 +78,7 @@ struct ModelOptions {
     int data_num;
     int parallel_num;
     int n_steps;
+    int M_pop;
 };
 
 struct ModelSettings{

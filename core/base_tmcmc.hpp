@@ -47,6 +47,56 @@ class BaseTMCMC : public BasePopulation{
     /** @fn 誤差関数の計算 */
 };
 
+// void BaseTMCMC::NextInverseTemperatures(int l){
+//     if(l == 0){
+//         settings_.inverse_temperatures.push_back(0);
+//     }else{
+//         double low_beta = settings_.inverse_temperatures[l-1];
+//         double old_beta = settings_.inverse_temperatures[l-1];
+//         double high_beta = 2.0;
+//         double threshold = 0.5;
+//         int rN = int(op_.sample_num*threshold);
+//         double new_beta;
+//         while(high_beta - low_beta > 1e-6){
+//             new_beta = (high_beta + low_beta)/2;
+//             vector<double> log_weights_un(op_.sample_num);
+//             for(int i = 0; i < op_.sample_num; i++){
+//                 log_weights_un[i] = -op_.data_num*(new_beta - old_beta)*energies_[l-1][i];
+//             }
+//             double log_weights_sum = 0;
+//             double exclude = log_weights_un[0];
+//             for(int i = 1; i < op_.sample_num; i++){
+//                 log_weights_sum += exp(log_weights_un[i] - exclude);
+//             }
+//             log_weights_sum = log(log_weights_sum) + exclude;
+//             vector<double> log_weights(op_.sample_num);
+//             for(int i = 0; i < op_.sample_num; i++){
+//                 log_weights[i] = log_weights_un[i] - log_weights_sum;
+//             }
+//             double log_weights_2_sum = 0;
+//             exclude = log_weights[0]*2;
+//             for(int i = 0; i < op_.sample_num; i++){
+//                 log_weights_2_sum += exp(log_weights[i]*2 - exclude);
+//             }
+//             log_weights_2_sum = log(log_weights_2_sum) + exclude;
+//             int ESS = int(exp(-log_weights_2_sum));
+//             if (ESS == rN){
+//                 break;
+//             }else if(ESS < rN){
+//                 high_beta = new_beta;
+//             }else{
+//                 low_beta = new_beta;
+//             }
+//         } 
+//         if(new_beta > 1){
+//             settings_.inverse_temperatures.push_back(1);
+//         }else{
+//             settings_.inverse_temperatures.push_back(new_beta); 
+//         }
+//         cout << "inverse_temperatures: " << settings_.inverse_temperatures[l] << endl;
+//     }
+// }
+
 void BaseTMCMC::NextInverseTemperatures(int l){
     if(l == 0){
         settings_.inverse_temperatures.push_back(0);
@@ -54,35 +104,23 @@ void BaseTMCMC::NextInverseTemperatures(int l){
         double low_beta = settings_.inverse_temperatures[l-1];
         double old_beta = settings_.inverse_temperatures[l-1];
         double high_beta = 2.0;
-        double threshold = 0.5;
-        int rN = int(op_.sample_num*threshold);
         double new_beta;
         while(high_beta - low_beta > 1e-6){
             new_beta = (high_beta + low_beta)/2;
-            vector<double> log_weights_un(op_.sample_num);
+            double mean = 0;
+            double exclude = exp(-op_.data_num*(new_beta - old_beta)*energies_[l-1][0]);
             for(int i = 0; i < op_.sample_num; i++){
-                log_weights_un[i] = -op_.data_num*(new_beta - old_beta)*energies_[l-1][i];
+                mean += exp(-op_.data_num*(new_beta - old_beta)*energies_[l-1][i] - exclude);
             }
-            double log_weights_sum = 0;
-            double exclude = log_weights_un[0];
-            for(int i = 1; i < op_.sample_num; i++){
-                log_weights_sum += exp(log_weights_un[i] - exclude);
+            mean /= op_.sample_num;
+            double CV = 0;
+            for (int i = 0; i < op_.sample_num; i++){
+                CV += pow(exp(-op_.data_num*(new_beta - old_beta)*energies_[l-1][i] - exclude) - mean, 2);
             }
-            log_weights_sum = log(log_weights_sum) + exclude;
-            vector<double> log_weights(op_.sample_num);
-            for(int i = 0; i < op_.sample_num; i++){
-                log_weights[i] = log_weights_un[i] - log_weights_sum;
-            }
-            double log_weights_2_sum = 0;
-            exclude = log_weights[0]*2;
-            for(int i = 0; i < op_.sample_num; i++){
-                log_weights_2_sum += exp(log_weights[i]*2 - exclude);
-            }
-            log_weights_2_sum = log(log_weights_2_sum) + exclude;
-            int ESS = int(exp(-log_weights_2_sum));
-            if (ESS == rN){
+            CV = sqrt(CV/(op_.sample_num))/mean;
+            if (CV == 1){
                 break;
-            }else if(ESS < rN){
+            }else if(CV > 1){
                 high_beta = new_beta;
             }else{
                 low_beta = new_beta;
@@ -96,6 +134,7 @@ void BaseTMCMC::NextInverseTemperatures(int l){
         cout << "inverse_temperatures: " << settings_.inverse_temperatures[l] << endl;
     }
 }
+
 
 vector<vector<double> > BaseTMCMC::ParameterCovariance(int l){
     // 重みつきのパラメータの共分散行列の計算

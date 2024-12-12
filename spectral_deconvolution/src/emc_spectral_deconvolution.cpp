@@ -38,7 +38,7 @@ void SpectralDeconvolutionEMC::FreeEnergyCalculation() {
 
 int main(){
     ModelOptions op;
-    op.gamma_decision = 0.8;
+    op.gamma_decision = 0.5;
     op.model_dim = 3;
     op.parameter_nums = {3,3,3};
     op.robbins_parameter.M = 20;
